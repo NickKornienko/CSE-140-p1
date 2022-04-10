@@ -3,62 +3,48 @@ In this file, you will implement generic search algorithms which are called by P
 """
 
 from sre_constants import FAILURE
-import util
-from inspect import stack
+# from inspect import stack
 
-
-def expand(problem, node):
-    s = node.state
-    for action in problem.actions(s):
-        t = problem.results(s, action)
-        yield node(node.pathCost + problem.actionCost(s, action, t))
+from pacai.util import stack
+from pacai.util import queue
+from pacai.util import priorityQueue
 
 
 def depthFirstSearch(problem):
-    """
-    Search the deepest nodes in the search tree first [p 85].
+    # node:
+    # [0] = state;
+    # [1] = actions from to start to state;
+    # [2] = cost (unused)
 
-    Your search algorithm needs to return a list of actions that reaches the goal.
-    Make sure to implement a graph search algorithm [Fig. 3.7].
+    if problem.isGoal(problem.startingState()):
+        return []
 
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
-    ```
-    print("Start: %s" % (str(problem.startingState())))
-    print("Is the start a goal?: %s" % (problem.isGoal(problem.startingState())))
-    print("Start's successors: %s" % (problem.successorStates(problem.startingState())))
-    ```
-    """
+    frontier = stack.Stack()
+    reached = []
 
-    print("Start: %s" % (str(problem.startingState())))
-    print("Is the start a goal?: %s" %
-          (problem.isGoal(problem.startingState())))
-    print("Start's successors: %s" %
-          (problem.successorStates(problem.startingState())))
+    node = (problem.startingState(), [], 0)
+    frontier.push(node)
 
-    # *** Your Code Here ***
-    raise NotImplementedError()
+    while not frontier.isEmpty():
+        node = frontier.pop()
+
+        if node[0] in reached:
+            continue
+
+        if problem.isGoal(node[0]):
+            return node[1]
+
+        reached.append(node[0])
+        expand = problem.successorStates(node[0])
+
+        for child in expand:
+            childNode = (child[0], node[1] + [child[1]], 0)
+            frontier.push(childNode)
+
+    return FAILURE
 
 
 def breadthFirstSearch(problem):
-    node = problem.startingState()
-
-    if problem.isGoal(node):
-        return node
-
-    frontier = util.stack()
-    reached = {problem.startingState()}
-
-    while not frontier.isEmpty():
-        node = util.stack.pop(frontier)
-        for child in expand:
-            s = child.state
-            if problem.isGoal(node):
-                return child
-            if not s in reached:
-                reached.add(s)
-                frontier.push(child)
-
     return FAILURE
 
 
