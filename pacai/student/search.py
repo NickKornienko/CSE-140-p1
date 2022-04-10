@@ -45,6 +45,36 @@ def depthFirstSearch(problem):
 
 
 def breadthFirstSearch(problem):
+    # node:
+    # [0] = state;
+    # [1] = actions from to start to state;
+    # [2] = cost (unused)
+
+    if problem.isGoal(problem.startingState()):
+        return []
+
+    frontier = queue.Queue()
+    reached = []
+
+    node = (problem.startingState(), [], 0)
+    frontier.push(node)
+
+    while not frontier.isEmpty():
+        node = frontier.pop()
+
+        if node[0] in reached:
+            continue
+
+        if problem.isGoal(node[0]):
+            return node[1]
+
+        reached.append(node[0])
+        expand = problem.successorStates(node[0])
+
+        for child in expand:
+            childNode = (child[0], node[1] + [child[1]], 0)
+            frontier.push(childNode)
+
     return FAILURE
 
 
