@@ -2,6 +2,18 @@
 In this file, you will implement generic search algorithms which are called by Pacman agents.
 """
 
+from sre_constants import FAILURE
+import util
+from inspect import stack
+
+
+def expand(problem, node):
+    s = node.state
+    for action in problem.actions(s):
+        t = problem.results(s, action)
+        yield node(node.pathCost + problem.actionCost(s, action, t))
+
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first [p 85].
@@ -18,16 +30,37 @@ def depthFirstSearch(problem):
     ```
     """
 
+    print("Start: %s" % (str(problem.startingState())))
+    print("Is the start a goal?: %s" %
+          (problem.isGoal(problem.startingState())))
+    print("Start's successors: %s" %
+          (problem.successorStates(problem.startingState())))
+
     # *** Your Code Here ***
     raise NotImplementedError()
+
 
 def breadthFirstSearch(problem):
-    """
-    Search the shallowest nodes in the search tree first. [p 81]
-    """
+    node = problem.startingState()
 
-    # *** Your Code Here ***
-    raise NotImplementedError()
+    if problem.isGoal(node):
+        return node
+
+    frontier = util.stack()
+    reached = {problem.startingState()}
+
+    while not frontier.isEmpty():
+        node = util.stack.pop(frontier)
+        for child in expand:
+            s = child.state
+            if problem.isGoal(node):
+                return child
+            if not s in reached:
+                reached.add(s)
+                frontier.push(child)
+
+    return FAILURE
+
 
 def uniformCostSearch(problem):
     """
@@ -36,6 +69,7 @@ def uniformCostSearch(problem):
 
     # *** Your Code Here ***
     raise NotImplementedError()
+
 
 def aStarSearch(problem, heuristic):
     """
