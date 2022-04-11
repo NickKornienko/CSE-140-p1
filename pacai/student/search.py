@@ -115,9 +115,39 @@ def uniformCostSearch(problem):
 
 
 def aStarSearch(problem, heuristic):
-    """
-    Search the node that has the lowest combined cost and heuristic first.
-    """
+    # node:
+    # [0] = state;
+    # [1] = actions from to start to state;
+    # [2] = actual cost
+    # [3] = actual cost + next heuristic
 
-    # *** Your Code Here ***
-    raise NotImplementedError()
+    if problem.isGoal(problem.startingState()):
+        return []
+
+    frontier = priorityQueue.PriorityQueue()
+    reached = {}
+
+    node = (problem.startingState(), [], 0, 0)
+    frontier.push(node, 0)
+
+    while not frontier.isEmpty():
+        node = frontier.pop()
+
+        if problem.isGoal(node[0]):
+            return node[1]
+
+        if node[0] in reached:
+            if not node[3] < reached[node[0]] + heuristic(node[0], problem):
+                continue
+
+        reached[node[0]] = node[2]
+        expand = problem.successorStates(node[0])
+
+        for child in expand:
+            actualCost = node[2] + child[2]
+            cost = actualCost + heuristic(child[0], problem)
+
+            childNode = (child[0], node[1] + [child[1]], actualCost, cost)
+            frontier.push(childNode, cost)
+
+    return FAILURE
