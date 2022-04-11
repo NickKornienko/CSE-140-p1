@@ -145,9 +145,9 @@ def aStarSearch(problem, heuristic):
 
         for child in expand:
             actualCost = node[2] + child[2]
-            cost = actualCost + heuristic(child[0], problem)
+            estimatedCost = actualCost + heuristic(child[0], problem)
 
-            childNode = (child[0], node[1] + [child[1]], actualCost, cost)
-            frontier.push(childNode, cost)
+            childNode = (child[0], node[1] + [child[1]], actualCost, estimatedCost)
+            frontier.push(childNode, estimatedCost)
 
     return FAILURE
