@@ -24,6 +24,8 @@ class PriorityQueue(object):
 
     def pop(self):
         (priority, item) = heapq.heappop(self.heap)
+        if priority == 18 and self.heap.__len__() == 25:
+            x = 1
         return item
 
     def isEmpty(self):

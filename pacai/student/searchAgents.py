@@ -130,9 +130,9 @@ def cornersHeuristic(state, problem):
     for corner in remainingCorners:
         d = manhattan(state[0], corner)
         if d < closestCornerDistance:
-            closestCornerDistance = distance
+            closestCornerDistance = d
 
-    return closestCornerDistance
+    return heuristic.null(state, problem)
 
     # Useful information.
     # corners = problem.corners  # These are the corner coordinates

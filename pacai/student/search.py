@@ -131,15 +131,19 @@ def aStarSearch(problem, heuristic):
 
     while not frontier.isEmpty():
         node = frontier.pop()
+        if isinstance(node[0][1], dict):
+            position = node[0][0]
+        else:
+            position = node[0]
 
         if problem.isGoal(node[0]):
             return node[1]
 
-        if node[0] in reached:
-            if not node[3] < reached[node[0]] + heuristic(node[0], problem):
+        if position in reached:
+            if not node[3] < reached[position] + heuristic(node[0], problem):
                 continue
 
-        reached[node[0]] = node[2]
+        reached[position] = node[2]
         expand = problem.successorStates(node[0])
 
         for child in expand:
