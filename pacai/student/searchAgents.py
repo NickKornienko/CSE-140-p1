@@ -118,13 +118,23 @@ def cornersHeuristic(state, problem):
     i.e. it should be admissible.
     (You need not worry about consistency for this heuristic to receive full credit.)
     """
-    return heuristic.null(state, problem)
-    
+
+    # 0 = bottom left
+    # 1 = top left
+    # 2 = bottom right
+    # 3 = top right
+    cornersReachedDict = {
+        problem.corners[0]: 0,
+        problem.corners[1]: 1,
+        problem.corners[2]: 2,
+        problem.corners[3]: 3
+    }
+
     closestCornerDistance = 999999
 
     remainingCorners = []
     for corner in problem.corners:
-        if state[1][corner] is True:
+        if state[1][cornersReachedDict[corner]] is True:
             remainingCorners.append(corner)
 
     if not remainingCorners:
