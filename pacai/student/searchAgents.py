@@ -57,15 +57,11 @@ class CornersProblem(SearchProblem):
 
     def isGoal(self, state):
         for corner in self.corners:
-            if state[1][corner] == False:
+            if state[1][corner] is False:
                 return False
         return True
 
     def successorStates(self, state):
-        """
-        Returns successor states, the actions they require, and a constant cost of 1.
-        """
-
         successors = []
 
         for action in Directions.CARDINAL:
@@ -74,12 +70,13 @@ class CornersProblem(SearchProblem):
             nextx, nexty = int(x + dx), int(y + dy)
 
             if (not self.walls[nextx][nexty]):
-                nextState = (nextx, nexty), state[1]
-
-                cornersReached = state[1]
+                nextPositon = (nextx, nexty)
+                cornersReached = dict(state[1])
                 for corner in self.corners:
-                    if nextState[0] == corner:
+                    if nextPositon == corner:
                         cornersReached[corner] = True
+
+                nextState = nextPositon, cornersReached
 
                 # 0 = state
                 # 1 = action
