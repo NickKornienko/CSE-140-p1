@@ -124,26 +124,29 @@ def aStarSearch(problem, heuristic):
         return []
 
     frontier = priorityQueue.PriorityQueue()
-    reached = {}
+    reachedList = []
 
     node = (problem.startingState(), [], 0, 0)
     frontier.push(node, 0)
 
     while not frontier.isEmpty():
         node = frontier.pop()
-        if isinstance(node[0][1], list):
-            position = node[0][0]
-        else:
-            position = node[0]
+        state = node[0]
 
         if problem.isGoal(node[0]):
             return node[1]
 
-        if position in reached:
-            if not node[3] < reached[position] + heuristic(node[0], problem):
+        foundState = None
+        for s in reachedList:
+            if s[0] == state:
+                foundState = s
+
+        if foundState is not None:
+            if not node[3] < foundState[1] + heuristic(node[0], problem):
                 continue
 
-        reached[position] = node[2]
+        reachedList.append((state, node[2]))
+
         expand = problem.successorStates(node[0])
 
         for child in expand:
