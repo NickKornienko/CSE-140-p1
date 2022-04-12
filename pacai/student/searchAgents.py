@@ -87,6 +87,7 @@ class CornersProblem(SearchProblem):
                 # 3 = cornersReached
                 successors.append((nextState, action, 1, cornersReached))
 
+        self._numExpanded += 1
         return successors
 
     def actionsCost(self, actions):
@@ -110,15 +111,6 @@ class CornersProblem(SearchProblem):
 
 
 def cornersHeuristic(state, problem):
-    """
-    A heuristic for the CornersProblem that you defined.
-
-    This function should always return a number that is a lower bound
-    on the shortest path from the state to a goal of the problem;
-    i.e. it should be admissible.
-    (You need not worry about consistency for this heuristic to receive full credit.)
-    """
-
     # 0 = bottom left
     # 1 = top left
     # 2 = bottom right
@@ -147,11 +139,6 @@ def cornersHeuristic(state, problem):
 
     return closestCornerDistance
 
-    # Useful information.
-    # corners = problem.corners  # These are the corner coordinates
-    # walls = problem.walls  # These are the walls of the maze, as a Grid.
-
-    # *** Your Code Here ***
     return heuristic.null(state, problem)  # Default to trivial solution
 
 
