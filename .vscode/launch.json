@@ -12,11 +12,9 @@
             "justMyCode": true,
             "args": [
                 "--layout",
-                "tinyCorners",
+                "mediumCorners",
                 "--pacman",
-                "SearchAgent",
-                "--agent-args",
-                "fn=pacai.student.search.breadthFirstSearch,prob=pacai.student.searchAgents.CornersProblem"
+                "AStarCornersAgent"
             ]
         }
     ]

@@ -9,6 +9,7 @@ import logging
 
 from pacai.core.actions import Actions
 from pacai.core.directions import Directions
+from pacai.core.distance import manhattan
 from pacai.core.search import heuristic
 from pacai.core.search.position import PositionSearchProblem
 from pacai.core.search.problem import SearchProblem
@@ -115,6 +116,23 @@ def cornersHeuristic(state, problem):
     i.e. it should be admissible.
     (You need not worry about consistency for this heuristic to receive full credit.)
     """
+
+    closestCornerDistance = 999999
+
+    remainingCorners = []
+    for corner in problem.corners:
+        if state[1][corner] is True:
+            remainingCorners.append(corner)
+
+    if not remainingCorners:
+        return 0
+
+    for corner in remainingCorners:
+        d = manhattan(state[0], corner)
+        if d < closestCornerDistance:
+            closestCornerDistance = distance
+
+    return closestCornerDistance
 
     # Useful information.
     # corners = problem.corners  # These are the corner coordinates
