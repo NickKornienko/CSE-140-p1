@@ -131,7 +131,7 @@ def aStarSearch(problem, heuristic):
 
     while not frontier.isEmpty():
         node = frontier.pop()
-        if isinstance(node[0][1], dict):
+        if isinstance(node[0][1], list):
             position = node[0][0]
         else:
             position = node[0]

@@ -35,16 +35,18 @@ class CornersProblem(SearchProblem):
         # 1 = top left
         # 2 = bottom right
         # 3 = top right
-        cornersReached = {
-            self.corners[0]: False,
-            self.corners[1]: False,
-            self.corners[2]: False,
-            self.corners[3]: False
+        self.cornersReachedDict = {
+            self.corners[0]: 0,
+            self.corners[1]: 1,
+            self.corners[2]: 2,
+            self.corners[3]: 3
         }
 
+        cornersReached = [False, False, False, False]
+
         for corner in self.corners:
-            if self.startingPosition == cornersReached[corner]:
-                cornersReached[corner] = True
+            if self.startingPosition == cornersReached[self.cornersReachedDict[corner]]:
+                cornersReached[self.cornersReachedDict[corner]] = True
 
         # 0 = position
         # 1 = which corners have been reached
@@ -58,7 +60,7 @@ class CornersProblem(SearchProblem):
 
     def isGoal(self, state):
         for corner in self.corners:
-            if state[1][corner] is False:
+            if state[1][self.cornersReachedDict[corner]] is False:
                 return False
         return True
 
@@ -72,10 +74,10 @@ class CornersProblem(SearchProblem):
 
             if (not self.walls[nextx][nexty]):
                 nextPositon = (nextx, nexty)
-                cornersReached = dict(state[1])
+                cornersReached = list(state[1])
                 for corner in self.corners:
                     if nextPositon == corner:
-                        cornersReached[corner] = True
+                        cornersReached[self.cornersReachedDict[corner]] = True
 
                 nextState = nextPositon, cornersReached
 
@@ -116,7 +118,8 @@ def cornersHeuristic(state, problem):
     i.e. it should be admissible.
     (You need not worry about consistency for this heuristic to receive full credit.)
     """
-
+    return heuristic.null(state, problem)
+    
     closestCornerDistance = 999999
 
     remainingCorners = []
@@ -132,7 +135,7 @@ def cornersHeuristic(state, problem):
         if d < closestCornerDistance:
             closestCornerDistance = d
 
-    return heuristic.null(state, problem)
+    return closestCornerDistance
 
     # Useful information.
     # corners = problem.corners  # These are the corner coordinates
