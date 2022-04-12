@@ -69,16 +69,16 @@ class CornersProblem(SearchProblem):
         successors = []
 
         for action in Directions.CARDINAL:
-            x, y = state
+            x, y = state[0]
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
 
             if (not self.walls[nextx][nexty]):
-                nextState = (nextx, nexty)
+                nextState = (nextx, nexty), state[1]
 
                 cornersReached = state[1]
                 for corner in self.corners:
-                    if self.startingPosition == cornersReached[corner]:
+                    if nextState[0] == corner:
                         cornersReached[corner] = True
 
                 # 0 = state

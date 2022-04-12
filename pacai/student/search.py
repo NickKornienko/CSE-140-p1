@@ -120,7 +120,6 @@ def aStarSearch(problem, heuristic):
     # [1] = actions from to start to state;
     # [2] = actual cost
     # [3] = actual cost + next heuristic
-
     if problem.isGoal(problem.startingState()):
         return []
 
@@ -147,7 +146,8 @@ def aStarSearch(problem, heuristic):
             actualCost = node[2] + child[2]
             estimatedCost = actualCost + heuristic(child[0], problem)
 
-            childNode = (child[0], node[1] + [child[1]], actualCost, estimatedCost)
+            childNode = (child[0], node[1] + [child[1]],
+                         actualCost, estimatedCost)
             frontier.push(childNode, estimatedCost)
 
     return FAILURE
