@@ -10,7 +10,14 @@
             "request": "launch",
             "module": "pacai.bin.pacman",
             "justMyCode": true,
-            "args": ["--layout", "tinyMaze", "--pacman", "SearchAgent", "--agent-args", "fn=pacai.student.search.depthFirstSearch"]
+            "args": [
+                "--layout",
+                "tinyCorners",
+                "--pacman",
+                "SearchAgent",
+                "--agent-args",
+                "fn=pacai.student.search.breadthFirstSearch,prob=pacai.student.searchAgents.CornersProblem"
+            ]
         }
     ]
 }

@@ -8,48 +8,15 @@ Good luck and happy searching!
 import logging
 
 from pacai.core.actions import Actions
+from pacai.core.directions import Directions
 from pacai.core.search import heuristic
 from pacai.core.search.position import PositionSearchProblem
 from pacai.core.search.problem import SearchProblem
 from pacai.agents.base import BaseAgent
 from pacai.agents.search.base import SearchAgent
 
+
 class CornersProblem(SearchProblem):
-    """
-    This search problem finds paths through all four corners of a layout.
-
-    You must select a suitable state space and successor function.
-    See the `pacai.core.search.position.PositionSearchProblem` class for an example of
-    a working SearchProblem.
-
-    Additional methods to implement:
-
-    `pacai.core.search.problem.SearchProblem.startingState`:
-    Returns the start state (in your search space,
-    NOT a `pacai.core.gamestate.AbstractGameState`).
-
-    `pacai.core.search.problem.SearchProblem.isGoal`:
-    Returns whether this search state is a goal state of the problem.
-
-    `pacai.core.search.problem.SearchProblem.successorStates`:
-    Returns successor states, the actions they require, and a cost of 1.
-    The following code snippet may prove useful:
-    ```
-        successors = []
-
-        for action in Directions.CARDINAL:
-            x, y = currentPosition
-            dx, dy = Actions.directionToVector(action)
-            nextx, nexty = int(x + dx), int(y + dy)
-            hitsWall = self.walls[nextx][nexty]
-
-            if (not hitsWall):
-                # Construct the successor.
-
-        return successors
-    ```
-    """
-
     def __init__(self, startingGameState):
         super().__init__()
 
@@ -63,8 +30,64 @@ class CornersProblem(SearchProblem):
             if not startingGameState.hasFood(*corner):
                 logging.warning('Warning: no food in corner ' + str(corner))
 
-        # *** Your Code Here ***
-        raise NotImplementedError()
+        # 0 = bottom left
+        # 1 = top left
+        # 2 = bottom right
+        # 3 = top right
+        cornersReached = {
+            self.corners[0]: False,
+            self.corners[1]: False,
+            self.corners[2]: False,
+            self.corners[3]: False
+        }
+
+        for corner in self.corners:
+            if self.startingPosition == cornersReached[corner]:
+                cornersReached[corner] = True
+
+        # 0 = position
+        # 1 = which corners have been reached
+        self.startState = (
+            self.startingPosition,
+            cornersReached
+        )
+
+    def startingState(self):
+        return self.startState
+
+    def isGoal(self, state):
+        for corner in self.corners:
+            if state[1][corner] == False:
+                return False
+        return True
+
+    def successorStates(self, state):
+        """
+        Returns successor states, the actions they require, and a constant cost of 1.
+        """
+
+        successors = []
+
+        for action in Directions.CARDINAL:
+            x, y = state
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+
+            if (not self.walls[nextx][nexty]):
+                nextState = (nextx, nexty)
+
+                cornersReached = state[1]
+                for corner in self.corners:
+                    if self.startingPosition == cornersReached[corner]:
+                        cornersReached[corner] = True
+
+                # 0 = state
+                # 1 = action
+                # 2 = cost (always 1)
+                # 3 = cornersReached
+                successors.append((nextState, action, 1, cornersReached))
+
+        return successors
 
     def actionsCost(self, actions):
         """
@@ -85,6 +108,7 @@ class CornersProblem(SearchProblem):
 
         return len(actions)
 
+
 def cornersHeuristic(state, problem):
     """
     A heuristic for the CornersProblem that you defined.
@@ -101,6 +125,7 @@ def cornersHeuristic(state, problem):
 
     # *** Your Code Here ***
     return heuristic.null(state, problem)  # Default to trivial solution
+
 
 def foodHeuristic(state, problem):
     """
@@ -136,6 +161,7 @@ def foodHeuristic(state, problem):
     # *** Your Code Here ***
     return heuristic.null(state, problem)  # Default to the null heuristic.
 
+
 class ClosestDotSearchAgent(SearchAgent):
     """
     Search for all food using a sequence of searches.
@@ -151,14 +177,15 @@ class ClosestDotSearchAgent(SearchAgent):
         currentState = state
 
         while (currentState.getFood().count() > 0):
-            nextPathSegment = self.findPathToClosestDot(currentState)  # The missing piece
+            nextPathSegment = self.findPathToClosestDot(
+                currentState)  # The missing piece
             self._actions += nextPathSegment
 
             for action in nextPathSegment:
                 legal = currentState.getLegalActions()
                 if action not in legal:
                     raise Exception('findPathToClosestDot returned an illegal move: %s!\n%s' %
-                            (str(action), str(currentState)))
+                                    (str(action), str(currentState)))
 
                 currentState = currentState.generateSuccessor(0, action)
 
@@ -177,6 +204,7 @@ class ClosestDotSearchAgent(SearchAgent):
 
         # *** Your Code Here ***
         raise NotImplementedError()
+
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -199,11 +227,12 @@ class AnyFoodSearchProblem(PositionSearchProblem):
     Fill this in with a goal test that will complete the problem definition.
     """
 
-    def __init__(self, gameState, start = None):
-        super().__init__(gameState, goal = None, start = start)
+    def __init__(self, gameState, start=None):
+        super().__init__(gameState, goal=None, start=start)
 
         # Store the food for later reference.
         self.food = gameState.getFood()
+
 
 class ApproximateSearchAgent(BaseAgent):
     """
