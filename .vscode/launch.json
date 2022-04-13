@@ -12,9 +12,9 @@
             "justMyCode": true,
             "args": [
                 "--layout",
-                "mediumCorners",
+                "trickySearch",
                 "--pacman",
-                "AStarCornersAgent"
+                "AStarFoodSearchAgent"
             ]
         }
     ]
