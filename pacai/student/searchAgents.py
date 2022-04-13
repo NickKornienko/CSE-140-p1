@@ -122,8 +122,6 @@ def cornersHeuristic(state, problem):
         problem.corners[3]: 3
     }
 
-    closestCornerDistance = 999999
-
     remainingCorners = []
     for corner in problem.corners:
         if state[1][cornersReachedDict[corner]] is True:
@@ -132,12 +130,15 @@ def cornersHeuristic(state, problem):
     if not remainingCorners:
         return 0
 
+    cornerDistances = []
     for corner in remainingCorners:
-        d = manhattan(state[0], corner)
-        if d < closestCornerDistance:
-            closestCornerDistance = d
+        cornerDistances.append(manhattan(state[0], corner))
+    cornerDistances.sort()
 
-    return closestCornerDistance
+    if cornerDistances.__len__() == 1:
+        return cornerDistances[0]
+
+    return cornerDistances[0] - cornerDistances[cornerDistances.__len__() - 1]
 
     return heuristic.null(state, problem)  # Default to trivial solution
 
