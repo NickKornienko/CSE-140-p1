@@ -2,9 +2,6 @@
 In this file, you will implement generic search algorithms which are called by Pacman agents.
 """
 
-from sre_constants import FAILURE
-# from inspect import stack
-
 from pacai.util import stack
 from pacai.util import queue
 from pacai.util import priorityQueue
@@ -41,7 +38,7 @@ def depthFirstSearch(problem):
             childNode = (child[0], node[1] + [child[1]], 0)
             frontier.push(childNode)
 
-    return FAILURE
+    return None
 
 
 def breadthFirstSearch(problem):
@@ -75,7 +72,7 @@ def breadthFirstSearch(problem):
             childNode = (child[0], node[1] + [child[1]], 0)
             frontier.push(childNode)
 
-    return FAILURE
+    return None
 
 
 def uniformCostSearch(problem):
@@ -111,7 +108,7 @@ def uniformCostSearch(problem):
             childNode = (child[0], node[1] + [child[1]], cost)
             frontier.push(childNode, cost)
 
-    return FAILURE
+    return None
 
 
 def aStarSearch(problem, heuristic):
@@ -157,4 +154,4 @@ def aStarSearch(problem, heuristic):
                          actualCost, estimatedCost)
             frontier.push(childNode, estimatedCost)
 
-    return FAILURE
+    return None
