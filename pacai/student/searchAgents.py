@@ -6,6 +6,7 @@ Good luck and happy searching!
 """
 
 import logging
+from turtle import pos
 
 from pacai.core.actions import Actions
 from pacai.core.directions import Directions
@@ -15,6 +16,7 @@ from pacai.core.search.position import PositionSearchProblem
 from pacai.core.search.problem import SearchProblem
 from pacai.agents.base import BaseAgent
 from pacai.agents.search.base import SearchAgent
+from pacai.student import search
 
 
 class CornersProblem(SearchProblem):
@@ -172,16 +174,30 @@ def foodHeuristic(state, problem):
     foodDistances = []
     for food in foodGrid.asList():
         if food:
-            foodDistances.append(manhattan(position, food))
+            foodDistances.append((manhattan(position, food), food))
     foodDistances.sort()
 
     if foodDistances.__len__() == 0:
         return 0
 
-    return foodDistances[foodDistances.__len__() - 1]
+    closestFood = foodDistances[0][1]
+    closestFoodDistance = foodDistances[0][0]
 
-    # *** Your Code Here ***
-    return heuristic.null(state, problem)  # Default to the null heuristic.
+    foodDistances = []
+    for food in foodGrid.asList():
+        if food:
+            foodDistances.append((manhattan(closestFood, food), food))
+    foodDistances.sort()
+
+    if foodDistances.__len__() == 0:
+        return closestFoodDistance
+
+    # farthestFoodfromClosest =
+
+    farthestFoodfromClosestDist = foodDistances[foodDistances.__len__() - 1][0]
+
+    return closestFoodDistance + farthestFoodfromClosestDist
+    # return foodDistances[foodDistances.__len__() - 1]
 
 
 class ClosestDotSearchAgent(SearchAgent):
