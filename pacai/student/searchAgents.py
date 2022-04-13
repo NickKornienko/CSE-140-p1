@@ -178,7 +178,7 @@ def foodHeuristic(state, problem):
     if foodDistances.__len__() == 0:
         return 0
 
-    return foodDistances[0] + foodDistances[foodDistances.__len__() - 1]
+    return foodDistances[foodDistances.__len__() - 1]
 
     # *** Your Code Here ***
     return heuristic.null(state, problem)  # Default to the null heuristic.
