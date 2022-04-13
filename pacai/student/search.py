@@ -10,7 +10,7 @@ from pacai.util import priorityQueue
 def depthFirstSearch(problem):
     # node:
     # [0] = state;
-    # [1] = actions from to start to state;
+    # [1] = actions from start to state;
     # [2] = cost (unused)
 
     if problem.isGoal(problem.startingState()):
@@ -44,7 +44,7 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     # node:
     # [0] = state;
-    # [1] = actions from to start to state;
+    # [1] = actions from start to state;
     # [2] = cost (unused)
 
     if problem.isGoal(problem.startingState()):
@@ -78,7 +78,7 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     # node:
     # [0] = state;
-    # [1] = actions from to start to state;
+    # [1] = actions from start to state;
     # [2] = cost
 
     if problem.isGoal(problem.startingState()):
@@ -114,9 +114,10 @@ def uniformCostSearch(problem):
 def aStarSearch(problem, heuristic):
     # node:
     # [0] = state;
-    # [1] = actions from to start to state;
+    # [1] = actions from start to state;
     # [2] = actual cost
     # [3] = actual cost + next heuristic
+
     if problem.isGoal(problem.startingState()):
         return []
 
