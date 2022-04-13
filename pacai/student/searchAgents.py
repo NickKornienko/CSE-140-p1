@@ -14,6 +14,7 @@ from pacai.core.search.position import PositionSearchProblem
 from pacai.core.search.problem import SearchProblem
 from pacai.agents.base import BaseAgent
 from pacai.agents.search.base import SearchAgent
+from pacai.student.search import uniformCostSearch
 
 
 class CornersProblem(SearchProblem):
@@ -196,46 +197,18 @@ class ClosestDotSearchAgent(SearchAgent):
         logging.info('Path found with cost %d.' % len(self._actions))
 
     def findPathToClosestDot(self, gameState):
-        """
-        Returns a path (a list of actions) to the closest dot, starting from gameState.
-        """
-
-        # Here are some useful elements of the startState
-        # startPosition = gameState.getPacmanPosition()
-        # food = gameState.getFood()
-        # walls = gameState.getWalls()
-        # problem = AnyFoodSearchProblem(gameState)
-
-        # *** Your Code Here ***
-        raise NotImplementedError()
+        return uniformCostSearch(AnyFoodSearchProblem(gameState))
 
 
 class AnyFoodSearchProblem(PositionSearchProblem):
-    """
-    A search problem for finding a path to any food.
-
-    This search problem is just like the PositionSearchProblem,
-    but has a different goal test, which you need to fill in below.
-    The state space and successor function do not need to be changed.
-
-    The class definition above, `AnyFoodSearchProblem(PositionSearchProblem)`,
-    inherits the methods of `pacai.core.search.position.PositionSearchProblem`.
-
-    You can use this search problem to help you fill in
-    the `ClosestDotSearchAgent.findPathToClosestDot` method.
-
-    Additional methods to implement:
-
-    `pacai.core.search.position.PositionSearchProblem.isGoal`:
-    The state is Pacman's position.
-    Fill this in with a goal test that will complete the problem definition.
-    """
-
     def __init__(self, gameState, start=None):
         super().__init__(gameState, goal=None, start=start)
 
         # Store the food for later reference.
         self.food = gameState.getFood()
+
+    def isGoal(self, state):
+        return self.food[state[0]][state[1]]
 
 
 class ApproximateSearchAgent(BaseAgent):
