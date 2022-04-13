@@ -124,7 +124,7 @@ def cornersHeuristic(state, problem):
 
     remainingCorners = []
     for corner in problem.corners:
-        if state[1][cornersReachedDict[corner]] is True:
+        if state[1][cornersReachedDict[corner]] is False:
             remainingCorners.append(corner)
 
     if not remainingCorners:
@@ -135,12 +135,7 @@ def cornersHeuristic(state, problem):
         cornerDistances.append(manhattan(state[0], corner))
     cornerDistances.sort()
 
-    if cornerDistances.__len__() == 1:
-        return cornerDistances[0]
-
-    return cornerDistances[0] - cornerDistances[cornerDistances.__len__() - 1]
-
-    return heuristic.null(state, problem)  # Default to trivial solution
+    return cornerDistances[0] + cornerDistances[remainingCorners.__len__() - 1]
 
 
 def foodHeuristic(state, problem):
