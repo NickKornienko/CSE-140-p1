@@ -6,17 +6,14 @@ Good luck and happy searching!
 """
 
 import logging
-from turtle import pos
 
 from pacai.core.actions import Actions
 from pacai.core.directions import Directions
 from pacai.core.distance import manhattan
-from pacai.core.search import heuristic
 from pacai.core.search.position import PositionSearchProblem
 from pacai.core.search.problem import SearchProblem
 from pacai.agents.base import BaseAgent
 from pacai.agents.search.base import SearchAgent
-from pacai.student import search
 
 
 class CornersProblem(SearchProblem):
@@ -141,34 +138,6 @@ def cornersHeuristic(state, problem):
 
 
 def foodHeuristic(state, problem):
-    """
-    Your heuristic for the FoodSearchProblem goes here.
-
-    This heuristic must be consistent to ensure correctness.
-    First, try to come up with an admissible heuristic;
-    almost all admissible heuristics will be consistent as well.
-
-    If using A* ever finds a solution that is worse than what uniform cost search finds,
-    your heuristic is *not* consistent, and probably not admissible!
-    On the other hand, inadmissible or inconsistent heuristics may find optimal solutions,
-    so be careful.
-
-    The state is a tuple (pacmanPosition, foodGrid) where foodGrid is a
-    `pacai.core.grid.Grid` of either True or False.
-    You can call `foodGrid.asList()` to get a list of food coordinates instead.
-
-    If you want access to info like walls, capsules, etc., you can query the problem.
-    For example, `problem.walls` gives you a Grid of where the walls are.
-
-    If you want to *store* information to be reused in other calls to the heuristic,
-    there is a dictionary called problem.heuristicInfo that you can use.
-    For example, if you only want to count the walls once and store that value, try:
-    ```
-    problem.heuristicInfo['wallCount'] = problem.walls.count()
-    ```
-    Subsequent calls to this heuristic can access problem.heuristicInfo['wallCount'].
-    """
-
     position, foodGrid = state
 
     foodDistances = []
@@ -192,12 +161,9 @@ def foodHeuristic(state, problem):
     if foodDistances.__len__() == 0:
         return closestFoodDistance
 
-    # farthestFoodfromClosest =
-
     farthestFoodfromClosestDist = foodDistances[foodDistances.__len__() - 1][0]
 
     return closestFoodDistance + farthestFoodfromClosestDist
-    # return foodDistances[foodDistances.__len__() - 1]
 
 
 class ClosestDotSearchAgent(SearchAgent):
