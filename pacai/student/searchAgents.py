@@ -6,10 +6,11 @@ Good luck and happy searching!
 """
 
 import logging
+from turtle import position
 
 from pacai.core.actions import Actions
 from pacai.core.directions import Directions
-from pacai.core.distance import manhattan
+from pacai.core.distance import manhattan, maze
 from pacai.core.search.position import PositionSearchProblem
 from pacai.core.search.problem import SearchProblem
 from pacai.agents.base import BaseAgent
@@ -144,7 +145,8 @@ def foodHeuristic(state, problem):
     foodDistances = []
     for food in foodGrid.asList():
         if food:
-            foodDistances.append((manhattan(position, food), food))
+            d = manhattan(position, food)
+            foodDistances.append((d, food))
     foodDistances.sort()
 
     if foodDistances.__len__() == 0:
@@ -156,7 +158,8 @@ def foodHeuristic(state, problem):
     foodDistances = []
     for food in foodGrid.asList():
         if food:
-            foodDistances.append((manhattan(closestFood, food), food))
+            d = maze(closestFood, food, problem.startingGameState)
+            foodDistances.append((d, food))
     foodDistances.sort()
 
     if foodDistances.__len__() == 0:
