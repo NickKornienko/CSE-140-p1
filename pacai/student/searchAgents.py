@@ -6,7 +6,6 @@ Good luck and happy searching!
 """
 
 import logging
-from turtle import position
 
 from pacai.core.actions import Actions
 from pacai.core.directions import Directions
