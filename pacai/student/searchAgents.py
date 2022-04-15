@@ -18,7 +18,45 @@ from pacai.student.search import uniformCostSearch
 
 
 class CornersProblem(SearchProblem):
+    """
+    This search problem finds paths through all four corners of a layout.
+
+    You must select a suitable state space and successor function.
+    See the `pacai.core.search.position.PositionSearchProblem` class for an example of
+    a working SearchProblem.
+
+    Additional methods to implement:
+
+    `pacai.core.search.problem.SearchProblem.startingState`:
+    Returns the start state (in your search space,
+    NOT a `pacai.core.gamestate.AbstractGameState`).
+
+    `pacai.core.search.problem.SearchProblem.isGoal`:
+    Returns whether this search state is a goal state of the problem.
+
+    `pacai.core.search.problem.SearchProblem.successorStates`:
+    Returns successor states, the actions they require, and a cost of 1.
+    The following code snippet may prove useful:
+    ```
+        successors = []
+
+        for action in Directions.CARDINAL:
+            x, y = currentPosition
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
+
+            if (not hitsWall):
+                # Construct the successor.
+
+        return successors
+    ```
+    """
+
     def __init__(self, startingGameState):
+        """
+        CornersProblem constructor 
+        """
         super().__init__()
 
         self.walls = startingGameState.getWalls()
@@ -42,6 +80,7 @@ class CornersProblem(SearchProblem):
             self.corners[3]: 3
         }
 
+        # list used due to dicts not supporting ordering
         cornersReached = [False, False, False, False]
 
         for corner in self.corners:
@@ -56,15 +95,24 @@ class CornersProblem(SearchProblem):
         )
 
     def startingState(self):
+        """
+        return startState
+        """
         return self.startState
 
     def isGoal(self, state):
+        """
+        return if state is a goal state (all 4 corners reached)
+        """
         for corner in self.corners:
             if state[1][self.cornersReachedDict[corner]] is False:
                 return False
         return True
 
     def successorStates(self, state):
+        """
+        return successor states from the current state
+        """
         successors = []
 
         for action in Directions.CARDINAL:
@@ -72,6 +120,7 @@ class CornersProblem(SearchProblem):
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
 
+            # add all legal moves as successor states
             if (not self.walls[nextx][nexty]):
                 nextPositon = (nextx, nexty)
                 cornersReached = list(state[1])
@@ -87,7 +136,7 @@ class CornersProblem(SearchProblem):
                 # 3 = cornersReached
                 successors.append((nextState, action, 1, cornersReached))
 
-        self._numExpanded += 1
+        self._numExpanded += 1  # track expanded node count for output
         return successors
 
     def actionsCost(self, actions):
@@ -111,6 +160,11 @@ class CornersProblem(SearchProblem):
 
 
 def cornersHeuristic(state, problem):
+    """
+    returns sum of closest and farthest node distances from the current state
+    as the heuristic
+    """
+
     # 0 = bottom left
     # 1 = top left
     # 2 = bottom right
@@ -139,11 +193,20 @@ def cornersHeuristic(state, problem):
 
 
 def foodHeuristic(state, problem):
+    """
+    returns sum of closest node distance and
+    farthest node from closest node distance
+    as the heuristic
+    """
     position, foodGrid = state
 
     foodDistances = []
     for food in foodGrid.asList():
         if food:
+            # mahhattan distance is used here as it is much
+            # faster, but provides relatively accruate results.
+            # True distance provides slightly fewer nodes expanded,
+            # But nearly doubled run-time in the trickySearch layout
             d = manhattan(position, food)
             foodDistances.append((d, food))
     foodDistances.sort()
@@ -157,6 +220,11 @@ def foodHeuristic(state, problem):
     foodDistances = []
     for food in foodGrid.asList():
         if food:
+            # true distance is used here as manhatten distance is
+            # often not accurate use to walls being in the way.
+            # This is slightly slower since BFS is used, but much
+            # more accurate which leads to significantly fewer
+            # nodes expanded
             d = maze(closestFood, food, problem.startingGameState)
             foodDistances.append((d, food))
     foodDistances.sort()
@@ -199,17 +267,26 @@ class ClosestDotSearchAgent(SearchAgent):
         logging.info('Path found with cost %d.' % len(self._actions))
 
     def findPathToClosestDot(self, gameState):
+        """
+        Use UCS to find a solution (fewest nodes out of DFS, BFS, UFS)
+        """
         return uniformCostSearch(AnyFoodSearchProblem(gameState))
 
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     def __init__(self, gameState, start=None):
+        """
+        AnyFoodSearchProblem constructor
+        """
         super().__init__(gameState, goal=None, start=start)
 
         # Store the food for later reference.
         self.food = gameState.getFood()
 
     def isGoal(self, state):
+        """
+        returns true if current state contains food
+        """
         return self.food[state[0]][state[1]]
 
 
